@@ -9,6 +9,7 @@ import org.awaitility.Awaitility;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
@@ -65,7 +66,7 @@ public class UserControllerIT {
             return s3StorageService.confirmFileExistsInS3(id);
         };
 
-        Awaitility.waitAtMost(10, TimeUnit.MINUTES).until(userHasBeenAddedToRepo);
+        Awaitility.waitAtMost(20, TimeUnit.SECONDS).until(userHasBeenAddedToRepo);
         Awaitility.waitAtMost(10, TimeUnit.SECONDS).until(userPDFDocumentAddedToS3);
 
     }

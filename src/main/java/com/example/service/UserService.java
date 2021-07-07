@@ -22,10 +22,12 @@ public class UserService {
         //Store into Collection
         User insertedUser = userMongoDbRepository.insert(userMessage);
         log.info("ID for Inserted User: {}", insertedUser.getId());
+        System.out.println(findAll());
 
     }
 
     public Optional<User> getUser(String id) {
+        System.out.println(findAll());
         return userMongoDbRepository.findById(id);
     }
 
@@ -33,7 +35,4 @@ public class UserService {
         return userMongoDbRepository.findAll();
     }
 
-    public void deleteAll() {
-        userMongoDbRepository.deleteAll();
-    }
 }

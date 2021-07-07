@@ -1,20 +1,30 @@
 package com.example;
 
 
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CreateBucketRequest;
-import com.amazonaws.services.s3.model.GetBucketLocationRequest;
+import com.example.repository.UserMongoDbRepository;
+import com.mongodb.ConnectionString;
+import com.mongodb.MongoClientSettings;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+
+import de.flapdoodle.embed.mongo.config.ImmutableMongodConfig;
+import de.flapdoodle.embed.mongo.config.MongodConfig;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.utility.DockerImageName;
 
@@ -26,6 +36,7 @@ public class AppTestConfiguration {
 
     private static final GenericContainer activeMQContainer;
     private static final LocalStackContainer localStackContainer;
+    private static final MongoDBContainer mongoDBContainer;
 
     static {
         activeMQContainer = new GenericContainer<>("rmohr/activemq:latest")
@@ -35,10 +46,19 @@ public class AppTestConfiguration {
                 .withServices(LocalStackContainer.Service.S3)
                 .withEnv("DEFAULT_REGION", "us-east-1");
 
+        mongoDBContainer = new MongoDBContainer("mongo:4.4.2");
+
 
         activeMQContainer.start();
         localStackContainer.start();
+        mongoDBContainer.start();
 
+    }
+
+    @DynamicPropertySource
+    static void setProperties(DynamicPropertyRegistry registry) {
+        System.out.println("NOOOOOOOOOOOOOOOOOOOOOO");
+        registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
     }
 
     @Bean
@@ -72,6 +92,21 @@ public class AppTestConfiguration {
 
         return jmsTemplate;
     }
+
+
+    @Bean
+    public MongoTemplate mongoTemplate() throws Exception {
+        //ReplicaSetUrl will look similar to mongodb://localhost:33557/test
+        ConnectionString connectionString = new ConnectionString(mongoDBContainer.getReplicaSetUrl());
+        MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
+                .applyConnectionString(connectionString)
+                .build();
+
+        MongoClient mongoClient = MongoClients.create(mongoClientSettings);
+
+        return new MongoTemplate(mongoClient, "test");
+    }
+
 
 }
 

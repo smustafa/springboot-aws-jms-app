@@ -23,10 +23,6 @@ public class S3StorageService {
 
     public void storeUserPDFDocument(String userId, File fileToStore) {
 
-        System.out.println(amazonS3Client.getRegionName());
-        System.out.println(amazonS3Client.getS3AccountOwner());
-
-        System.out.println("BOOOO" + userPDFsBucket + " UserId " +  userId + "fileToStore" + fileToStore);
         amazonS3Client.putObject(userPDFsBucket, userId, fileToStore);
 
         log.info("Uploaded PDF Document {}, in Bucket: {}", fileToStore.getName(), userPDFsBucket);

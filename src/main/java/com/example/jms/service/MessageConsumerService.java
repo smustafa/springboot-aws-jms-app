@@ -31,7 +31,6 @@ public class MessageConsumerService {
     @JmsListener(destination = "${com.example.userQueue}")
     public void receiveMessage(User userMessage) throws DocumentException, IOException {
 
-        System.out.println("AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
         userService.insert(userMessage);
 
         //Create PDF and store into S3
