@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property scope="context" name="app.name" value="aws-jms-springboot-app" />
+    <contextName>${app.name}</contextName>
+
+    <property scope="context" name="base.file.log.pattern"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSSZ} [%thread] %-5level %logger{64} %X{request.UID.log} %X{vehicle.${VIN}.log} %X{user.USERNAME.log} - [%M] %msg%n" />
+
+    <appender name="base.console.appender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${base.file.log.pattern}</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="base.console.appender" />
+    </root>
+
+    <logger name="org.springframework" level="WARN" />
+    <logger name="org.testcontainers" level="WARN" />
+
+</configuration>
