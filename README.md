@@ -1,9 +1,9 @@
 The application will do the following:
 
-- Create API Endpoint of Creating a User
+- Create an API Endpoint for creating a User
 - Send a JMS Message to Amazon MQ to Queue [User.Queue]
 - Receive JMS Message from Amazon MQ from Queue [User.Queue]
-- Store User Information into MongoDB (In Memory)
+- Store User Information into MongoDB 
 - Create PDF Document with User Information
 - Store User PDF Document into S3 Bucket in AWS
 
