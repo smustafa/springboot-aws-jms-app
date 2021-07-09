@@ -55,12 +55,6 @@ public class AppTestConfiguration {
 
     }
 
-    @DynamicPropertySource
-    static void setProperties(DynamicPropertyRegistry registry) {
-        System.out.println("NOOOOOOOOOOOOOOOOOOOOOO");
-        registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
-    }
-
     @Bean
     public AmazonS3 amazonS3() {
         AmazonS3 amazonS3 = AmazonS3ClientBuilder
