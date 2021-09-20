@@ -17,17 +17,6 @@ public class AWSApplication {
 
              // Launch the application
         ConfigurableApplicationContext context = SpringApplication.run(AWSApplication.class, args);
-
-        MessageSenderService messageSenderService = context.getBean(MessageSenderService.class);
-
-
-        User u = new User();
-        u.setFirstName("Susan");
-        u.setLastName("LastName");
-        u.setAge(20);
-
-        messageSenderService.sendUserMessage(u);
-
     }
 }
 
